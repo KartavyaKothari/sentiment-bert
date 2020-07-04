@@ -9,9 +9,9 @@ Original file is located at
 # Installing all software
 """
 
-!pip install torch
-!pip install transformers
-!pip install tqdm
+#!pip install torch
+#!pip install transformers
+#!pip install tqdm
 
 """# Importing stuff"""
 
@@ -49,8 +49,8 @@ import pandas as pd
 #     print('No GPU available, using the CPU instead.')
 #     device = torch.device("cpu")
 
-!wget -x -c --load-cookies drive/My\ Drive/cookies.txt https://www.kaggle.com/kazanova/sentiment140/download
-!unzip www.kaggle.com/kazanova/sentiment140/download
+#!wget -x -c --load-cookies drive/My\ Drive/cookies.txt https://www.kaggle.com/kazanova/sentiment140/download
+#!unzip www.kaggle.com/kazanova/sentiment140/download
 
 nltk.download('stopwords')
 
@@ -75,15 +75,19 @@ class Data:
     return ' '.join(tokens)
 
   def load_data(self):
-    data = pd.read_csv(self.filename,encoding="ISO-8859-1",names = ["target", "ids", "date", "flag", "user", "text"]).sample(frac=1)
-    self.dataframe = data[['text','target']].iloc[0:200]
+    data = pd.read_csv(self.filename,encoding="ISO-8859-1",names = ["target", "ids", "date", "flag", "user", "text"])
+    self.dataframe = data[['text','target']].sample(frac=1)
+    # self.dataframe = self.dataframe.iloc[0:20000]
+    print("File read into dataframe")
     return self.preprocess_data()
 
   def preprocess_data(self):
     # Convert {0,4} to {0,1} labels
     self.dataframe.target = self.dataframe.target.apply(lambda x: x//4)
+    print("Converted 04 to 01")
 
     self.dataframe.text = self.dataframe.text.apply(lambda x: self.cleanText(x))
+    print("Cleaned text of stopwords")
 
     tokenizer = transformers.BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
     tokenized_text = []
@@ -102,6 +106,7 @@ class Data:
       
       tokenized_text.append(encoded_dict['input_ids'])
       attention_masks.append(encoded_dict['attention_mask'])
+    print("Bert tokenization complete")
 
     tokenized_text = torch.cat(tokenized_text, dim=0)
     attention_masks = torch.cat(attention_masks, dim=0)
@@ -160,14 +165,14 @@ class Model(nn.Module):
 
 """# Initiate the training parameters"""
 
-batchSize = 32
-numEpochs = 50
+batchSize = 500
+numEpochs = 10
 learning_rate = 1e-3
 
-dataset = Data(32,'training.1600000.processed.noemoticon.csv')
+dataset = Data(batchSize,'data/training.1600000.processed.noemoticon.csv')
 train_dl, val_dl, test_dl = dataset.load_data()
-
-model = Model(batchSize=32)
+print("Data preparation complete, training begins now")
+model = Model(batchSize)
 # model.to(device)
 # if torch.cuda.is_available():
 #   model.cuda()
@@ -210,6 +215,8 @@ for epoch in tqdm(range(numEpochs)):
   print("Validation accuracy:", accuracy_score(labels_flat, pred_flat))
   print("Validation F1-micro score:", f1_score(labels_flat, pred_flat, average='micro'))
   print( "Validation Loss:", valLoss)
+
+  torch.save(model,'models/sentiment'+str(epoch)+'.pth')
 
 def TestEvaluation(model, testSet):
   model.eval()
