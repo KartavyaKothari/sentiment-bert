@@ -76,7 +76,7 @@ class Data:
 
   def load_data(self):
     data = pd.read_csv(self.filename,encoding="ISO-8859-1",names = ["target", "ids", "date", "flag", "user", "text"])
-    self.dataframe = data[['text','target']].sample(frac=1)
+    self.dataframe = data[['text','target']].sample(frac=0.1)
     # self.dataframe = self.dataframe.iloc[0:20000]
     print("File read into dataframe")
     return self.preprocess_data()
@@ -120,7 +120,7 @@ class Data:
     return self.tvt_split(dataset)
 
   def tvt_split(self,dataset):
-    split = [round(i*self.tuple_cnt) for i in [0.7,0.2,0.1]]
+    split = [round(i*self.tuple_cnt) for i in [0.5,0.4,0.1]]
     trainSet, testSet, valSet = random_split(dataset, split)
 
     train_dl = DataLoader(
@@ -165,9 +165,9 @@ class Model(nn.Module):
 
 """# Initiate the training parameters"""
 
-batchSize = 500
+batchSize = 1024
 numEpochs = 10
-learning_rate = 1e-3
+learning_rate = 1e-4
 
 dataset = Data(batchSize,'data/training.1600000.processed.noemoticon.csv')
 train_dl, val_dl, test_dl = dataset.load_data()
