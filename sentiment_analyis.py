@@ -167,7 +167,7 @@ class Model(nn.Module):
 
 batchSize = 1024
 numEpochs = 10
-learning_rate = 1e-4
+learning_rate = 1e-3
 
 dataset = Data(batchSize,'data/training.1600000.processed.noemoticon.csv')
 train_dl, val_dl, test_dl = dataset.load_data()
