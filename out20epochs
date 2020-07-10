@@ -1,0 +1,54 @@
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /mnt/b100/d0/kartavya/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [2:12:01<19:48:16, 7921.88s/it] 20%|██        | 2/10 [4:24:34<17:37:28, 7931.03s/it] 30%|███       | 3/10 [6:40:04<15:32:14, 7990.66s/it] 40%|████      | 4/10 [8:51:25<13:15:47, 7957.99s/it] 50%|█████     | 5/10 [11:02:00<11:00:05, 7921.10s/it] 60%|██████    | 6/10 [13:13:53<8:47:54, 7918.61s/it]  70%|███████   | 7/10 [15:28:53<6:38:38, 7972.97s/it] 80%|████████  | 8/10 [17:44:54<4:27:38, 8029.25s/it] 90%|█████████ | 9/10 [20:00:42<2:14:24, 8064.99s/it]100%|██████████| 10/10 [22:15:41<00:00, 8075.17s/it] 100%|██████████| 10/10 [22:15:41<00:00, 8014.13s/it]
+File read into dataframe
+Converted 04 to 01
+Cleaned text of stopwords
+Bert tokenization complete
+Total tuples 160000
+Data preparation complete, training begins now
+
+Validation accuracy: 0.6717332409274194
+Validation F1-micro score: 0.6717332409274194
+Validation Loss: 38.72554063796997
+
+Validation accuracy: 0.6808058215725806
+Validation F1-micro score: 0.6808058215725806
+Validation Loss: 38.12911254167557
+
+Validation accuracy: 0.6955645161290323
+Validation F1-micro score: 0.6955645161290323
+Validation Loss: 37.39903426170349
+
+Validation accuracy: 0.7051411290322581
+Validation F1-micro score: 0.7051411290322581
+Validation Loss: 36.83317822217941
+
+Validation accuracy: 0.7123865927419355
+Validation F1-micro score: 0.7123865927419355
+Validation Loss: 36.40884351730347
+
+Validation accuracy: 0.7169071320564516
+Validation F1-micro score: 0.7169071320564516
+Validation Loss: 36.09697216749191
+
+Validation accuracy: 0.7224514868951613
+Validation F1-micro score: 0.7224514868951613
+Validation Loss: 35.777838945388794
+
+Validation accuracy: 0.7258852066532258
+Validation F1-micro score: 0.7258852066532258
+Validation Loss: 35.56500619649887
+
+Validation accuracy: 0.7282163558467742
+Validation F1-micro score: 0.7282163558467742
+Validation Loss: 35.41347050666809
+
+Validation accuracy: 0.7313035534274194
+Validation F1-micro score: 0.7313035534274194
+Validation Loss: 35.21840059757233
+********************
+Complete iteration model
+Test Accuracy: 0.7337239583333334
+Test F1-score micro: 0.7337239583333334
