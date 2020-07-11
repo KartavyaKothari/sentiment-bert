@@ -1,12 +1,11 @@
 # Sentiment analysis using BERT
 
-1. Create vitualenv
-2. Install requirements
-  
-  `pip install requirements.txt`
+1. Create conda environment
 
-3. Download data to 'data/'
+  `conda create --name sentiment_env`
   
-  `wget www.cse.iitb.ac.in/~kartavya/download`
-  
-  `unzip download`
+  `conda activate sentiment_env`
+
+2. Run setup
+
+  `./hello.sh`
