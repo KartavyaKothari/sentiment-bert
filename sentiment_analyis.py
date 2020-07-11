@@ -76,7 +76,7 @@ class Data:
 
   def load_data(self):
     data = pd.read_csv(self.filename,encoding="ISO-8859-1",names = ["target", "ids", "date", "flag", "user", "text"])
-    self.dataframe = data[['text','target']].sample(frac=0.1)
+    self.dataframe = data[['text','target']].sample(frac=0.2)
     # self.dataframe = self.dataframe.iloc[0:20000]
     print("File read into dataframe")
     return self.preprocess_data()
@@ -165,8 +165,8 @@ class Model(nn.Module):
 
 """# Initiate the training parameters"""
 
-batchSize = 1024
-numEpochs = 10
+batchSize = 256
+numEpochs = 60
 learning_rate = 1e-3
 
 dataset = Data(batchSize,'data/training.1600000.processed.noemoticon.csv')
@@ -174,8 +174,8 @@ train_dl, val_dl, test_dl = dataset.load_data()
 print("Data preparation complete, training begins now")
 model = Model(batchSize)
 # model.to(device)
-# if torch.cuda.is_available():
-#   model.cuda()
+if torch.cuda.is_available():
+  model.cuda()
 
 criteron = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(),lr=learning_rate)
@@ -187,7 +187,12 @@ accuracy_list = []
 for epoch in tqdm(range(numEpochs)):
   for ip,mask,label in train_dl:
     model.train()
-
+    
+    if torch.cuda.is_available():
+      ip = ip.cuda()
+      mask = mask.cuda()
+      label = label.cuda()
+    
     if label.shape[0]!=batchSize:
       continue
     output = model(ip,mask)
@@ -205,11 +210,16 @@ for epoch in tqdm(range(numEpochs)):
       continue #Otherwise creates problem with the model architecture
 
     with torch.no_grad():
+      if torch.cuda.is_available():
+        ip = ip.cuda()
+        mask = mask.cuda()
+        label = label.cuda()
+        
       out = model(ip,mask)
-    preds = out.detach().numpy()
+    preds = out.cpu().detach().numpy()
     pred_flat.extend(np.argmax(preds, axis=1).flatten())
-    labels_flat.extend(label.numpy())
-    valLoss += criteron(out, label).item()
+    labels_flat.extend(label.cpu().numpy())
+    valLoss += criteron(out.cpu(), label).item()
 
   print("")
   print("Validation accuracy:", accuracy_score(labels_flat, pred_flat))
