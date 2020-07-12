@@ -165,7 +165,7 @@ class Model(nn.Module):
 
 """# Initiate the training parameters"""
 
-batchSize = 256
+batchSize = 128
 numEpochs = 60
 learning_rate = 1e-3
 
@@ -219,14 +219,14 @@ for epoch in tqdm(range(numEpochs)):
     preds = out.cpu().detach().numpy()
     pred_flat.extend(np.argmax(preds, axis=1).flatten())
     labels_flat.extend(label.cpu().numpy())
-    valLoss += criteron(out.cpu(), label).item()
+    valLoss += criteron(out.cpu(), label.cpu()).item()
 
   print("")
   print("Validation accuracy:", accuracy_score(labels_flat, pred_flat))
   print("Validation F1-micro score:", f1_score(labels_flat, pred_flat, average='micro'))
   print( "Validation Loss:", valLoss)
 
-  torch.save(model,'models/sentiment'+str(epoch)+'.pth')
+torch.save(model,'models/sentiment.pth')
 
 def TestEvaluation(model, testSet):
   model.eval()
@@ -242,7 +242,7 @@ def TestEvaluation(model, testSet):
 
     with torch.no_grad():
       out = model(b_input_ids,b_input_mask)
-    preds = out.detach().numpy()
+    preds = out.cpu().detach().numpy()
     pred_flat.extend(np.argmax(preds, axis=1).flatten().tolist())
     labels_flat.extend(b_labels.cpu().numpy().flatten().tolist())
 

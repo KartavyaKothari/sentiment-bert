@@ -1,5 +1,5 @@
 #!/bin/bash
-
+mkdir models
 mkdir data
 cd data
 wget www.cse.iitb.ac.in/~kartavya/download
